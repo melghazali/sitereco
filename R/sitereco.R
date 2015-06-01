@@ -48,8 +48,8 @@ reco.sites <- function(last.site) {
   #stopifnot(file.exists("./data/page-list.RData"))
   #load(file="./data/page-list.RData")
   
-    stopifnot(file.exists("./data/MySiteVisits.csv")) 
-    data <- read.csv("./data/MySiteVisits.csv") 
+    stopifnot(file.exists("../data/MySiteVisits.csv")) 
+    data <- read.csv("../data/MySiteVisits.csv") 
     
     for(i in 1:nrow(data)) {
       ##print(sprintf("row[%d]",i))
