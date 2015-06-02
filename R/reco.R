@@ -2,22 +2,23 @@
 ## a web server log.
 # Load required libraries
 
-library(rEMM)
-
-page.data <- matrix(0L,0,6)
-colnames(page.data) <- c("4/27/2015", 
-                         "4/28/2015", 
-                         "5/2/2015", 
-                         "5/3/2015", 
-                         "5/11/2015", 
-                         "5/12/2015")
-
-page.list <- matrix(NA,0,4)
-colnames(page.list) <- c("ID", "Date", "Domain", "SiteTime")
-
-emm <- EMM(threshold=0.2, measure="eJaccard")
-
 reco.sites <- function(last.site) {
+    
+    library(rEMM)
+    
+    page.data <- matrix(0L,0,6)
+    colnames(page.data) <- c("4/27/2015", 
+                             "4/28/2015", 
+                             "5/2/2015", 
+                             "5/3/2015", 
+                             "5/11/2015", 
+                             "5/12/2015")
+    
+    page.list <- matrix(NA,0,4)
+    colnames(page.list) <- c("ID", "Date", "Domain", "SiteTime")
+    
+    emm <- EMM(threshold=0.2, measure="eJaccard")
+    
     data <- read.csv("http://melghazali.ocpu.io/sitereco/data/MySiteVisits/csv") 
     
     for(i in 1:nrow(data)) {
