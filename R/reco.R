@@ -2,7 +2,7 @@
 ## a web server log.
 # Load required libraries
 
-reco.sites <- function(last.site) {
+reco.sites <- function(last.site="") {
     
     library(rEMM)
     
@@ -55,8 +55,8 @@ reco.sites <- function(last.site) {
     if (!is.null(last.site)) {
       id <- as.integer(page.list[match(tolower(last.site),page.list[,3]),1])
       
-      # last.site does not exist if id is null
-      if (!is.null(id)) {
+      # last.site does not exist if id is NA
+      if (!is.na(id)) {
         last.request <- page.hash[id]
       }
       else {
