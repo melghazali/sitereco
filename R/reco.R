@@ -1,6 +1,9 @@
 ##This script contains functions used to parse a line from
 ## a web server log.
 # Load required libraries
+#
+# curl https://public.opencpu.org/ocpu/github/melghazali/sitereco/R/reco.sites/json -d 'last.site="live.com"'
+#
 
 reco.sites <- function(last.site="") {
     
@@ -39,7 +42,7 @@ reco.sites <- function(last.site="") {
             page.data <- rbind(page.data, newPath)
         }
         
-        page.data[as.character(path), date] <- as.integer(site.time)
+        page.data[as.character(path), date] <- as.integer(site.time)            
         
       }
 
@@ -71,9 +74,15 @@ reco.sites <- function(last.site="") {
     if (! is.null(last.request)) {
       likelihoods <- predict(emm, current_state=last.request, 
                              probabilities=TRUE)
-      top.five <- names(sort(x=likelihoods, decreasing=TRUE)[1:5])
-      for (i in 1:5) {
-        prediction[[i]] <- toString(page.list[as.numeric(top.five[i]),3])
+      top.ten <- names(sort(x=likelihoods, decreasing=TRUE)[1:10])
+      
+      j = 1
+      for (i in 1:10) {
+          site = toString(page.list[as.numeric(top.ten[i]),3])
+          if (site != last.site) {
+              prediction[j] <- site
+              j <- j + 1
+          }
       } 
     }
     
