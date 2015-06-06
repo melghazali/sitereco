@@ -9,13 +9,24 @@ reco.sites <- function(last.site="") {
     
     library(rEMM)
     
-    page.data <- matrix(0L,0,6)
-    colnames(page.data) <- c("4/27/2015", 
-                             "4/28/2015", 
-                             "5/2/2015", 
-                             "5/3/2015", 
-                             "5/11/2015", 
-                             "5/12/2015")
+    page.data <- matrix(0L,0,17)
+    colnames(page.data) <- c("04/27/2015", 
+                             "04/28/2015", 
+                             "05/02/2015", 
+                             "05/03/2015", 
+                             "05/11/2015", 
+                             "05/12/2015",
+                             "05/26/2015",
+                             "05/27/2015", 
+                             "05/28/2015",
+                             "05/30/2015",
+                             "05/31/2015",
+                             "06/01/2015",
+                             "06/02/2015",
+                             "06/03/2015",
+                             "06/04/2015",
+                             "06/05/2015",
+                             "06/06/2015")
     
     page.list <- matrix(NA,0,4)
     colnames(page.list) <- c("ID", "Date", "Domain", "SiteTime")
@@ -38,7 +49,7 @@ reco.sites <- function(last.site="") {
         page.list <- rbind(page.list, tuple)
           
         if (is.na(page.data[as.character(path)])) {
-            newPath <- matrix(0,1,6)
+            newPath <- matrix(0,1,17)
             rownames(newPath) <- path
             page.data <- rbind(page.data, newPath)
         }
