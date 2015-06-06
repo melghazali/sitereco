@@ -22,7 +22,8 @@ reco.sites <- function(last.site="") {
     
     emm <- EMM(threshold=0.2, measure="eJaccard")
     
-    data <- read.csv("http://melghazali.ocpu.io/sitereco/data/MySiteVisits/csv") 
+    data <- read.csv("http://melghazali.ocpu.io/sitereco/data/MySiteVisits2/csv") 
+    #data <- read.csv("../data/MySiteVisits2.csv") 
     
     for(i in 1:nrow(data)) {
       
