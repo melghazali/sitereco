@@ -9,24 +9,24 @@ reco.sites <- function(last.site="") {
     
     library(rEMM)
     
-    page.data <- matrix(0L,0,17)
-    colnames(page.data) <- c("04/27/2015", 
-                             "04/28/2015", 
-                             "05/02/2015", 
-                             "05/03/2015", 
-                             "05/11/2015", 
-                             "05/12/2015",
-                             "05/26/2015",
-                             "05/27/2015", 
-                             "05/28/2015",
-                             "05/30/2015",
-                             "05/31/2015",
-                             "06/01/2015",
-                             "06/02/2015",
-                             "06/03/2015",
-                             "06/04/2015",
-                             "06/05/2015",
-                             "06/06/2015")
+    page.data <- matrix(0L,0,17) 
+    colnames(page.data) <- c("4/27/2015", 
+                             "4/28/2015", 
+                             "5/2/2015", 
+                             "5/3/2015", 
+                             "5/11/2015", 
+                             "5/12/2015",
+                             "5/26/2015",
+                             "5/27/2015", 
+                             "5/28/2015",
+                             "5/30/2015",
+                             "5/31/2015",
+                             "6/1/2015",
+                             "6/2/2015",
+                             "6/3/2015",
+                             "6/4/2015",
+                             "6/5/2015",
+                             "6/6/2015")
     
     page.list <- matrix(NA,0,4)
     colnames(page.list) <- c("ID", "Date", "Domain", "SiteTime")
@@ -37,7 +37,7 @@ reco.sites <- function(last.site="") {
     #data <- read.csv("../data/MySiteVisits2.csv") 
     
     for(i in 1:nrow(data)) {
-      
+        
         str <- strsplit(as.vector(data[i,]), ",")
         tuple <- matrix(c(i, unlist(str)), ncol=4, nrow=1)
         tuple[3] <- tolower(tuple[3])
@@ -47,8 +47,8 @@ reco.sites <- function(last.site="") {
         
         
         page.list <- rbind(page.list, tuple)
-          
-        if (is.na(page.data[as.character(path)])) {
+        
+        if (! path %in% rownames(page.data)) {
             newPath <- matrix(0,1,17)
             rownames(newPath) <- path
             page.data <- rbind(page.data, newPath)
@@ -56,8 +56,8 @@ reco.sites <- function(last.site="") {
         
         page.data[as.character(path), date] <- as.integer(site.time)            
         
-      }
-
+    }
+    
     # build the model
     build(emm, page.data)
     
@@ -68,34 +68,34 @@ reco.sites <- function(last.site="") {
     nRow <- nrow(page.list)
     
     if (!is.null(last.site)) {
-      id <- as.integer(page.list[match(tolower(last.site),page.list[,3]),1])
-      
-      # last.site does not exist if id is NA
-      if (!is.na(id)) {
-        last.request <- page.hash[id]
-      }
-      else {
-        last.request <- current_state(emm)
-      }
+        id <- as.integer(page.list[match(tolower(last.site),page.list[,3]),1])
+        
+        # last.site does not exist if id is NA
+        if (!is.na(id)) {
+            last.request <- page.hash[id]
+        }
+        else {
+            last.request <- current_state(emm)
+        }
     }
     else {
-      last.request <- current_state(emm)
+        last.request <- current_state(emm)
     }
     
     
     if (! is.null(last.request)) {
-      likelihoods <- predict(emm, current_state=last.request, 
-                             probabilities=TRUE)
-      top.ten <- names(sort(x=likelihoods, decreasing=TRUE)[1:10])
-      
-      j = 1
-      for (i in 1:10) {
-          site = toString(page.list[as.numeric(top.ten[i]),3])
-          if (site != last.site) {
-              prediction[j] <- site
-              j <- j + 1
-          }
-      } 
+        likelihoods <- predict(emm, current_state=last.request, 
+                               probabilities=TRUE)
+        top.ten <- names(sort(x=likelihoods, decreasing=TRUE)[1:10])
+        
+        j = 1
+        for (i in 1:10) {
+            site = toString(page.list[as.numeric(top.ten[i]),3])
+            if (site != last.site) {
+                prediction[j] <- site
+                j <- j + 1
+            }
+        } 
     }
     
     return(prediction)
