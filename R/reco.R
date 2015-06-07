@@ -28,25 +28,28 @@ reco.sites <- function(last.site="") {
                              "6/5/2015",
                              "6/6/2015")
     
-    page.list <- matrix(NA,0,4)
-    colnames(page.list) <- c("ID", "Date", "Domain", "SiteTime")
+    page.list <- matrix(0L,0,2)
+    colnames(page.list) <- c("ID", "Domain")
     
     emm <- EMM(threshold=0.2, measure="eJaccard")
     
     data <- read.csv("http://melghazali.ocpu.io/sitereco/data/MySiteVisits2/csv") 
     #data <- read.csv("../data/MySiteVisits2.csv") 
+    index <- 1L
     
     for(i in 1:nrow(data)) {
         
         str <- strsplit(as.vector(data[i,]), ",")
-        tuple <- matrix(c(i, unlist(str)), ncol=4, nrow=1)
-        tuple[3] <- tolower(tuple[3])
-        date <- unlist(as.character(tuple[2]))
-        path <- unlist(tuple[3])
-        site.time <- as.integer(tuple[4])
+        tuple <- matrix(c(unlist(str)), ncol=3, nrow=1)
+        tuple[2] <- tolower(tuple[2])
+        date <- unlist(as.character(tuple[1]))
+        path <- unlist(tuple[2])
+        site.time <- as.integer(tuple[3])
         
-        
-        page.list <- rbind(page.list, tuple)
+        if (! path %in% page.list[,2]) {
+            page.list <- rbind(page.list, c(index, path))
+            index <- index + 1
+        }
         
         if (! path %in% rownames(page.data)) {
             newPath <- matrix(0,1,17)
@@ -68,7 +71,7 @@ reco.sites <- function(last.site="") {
     nRow <- nrow(page.list)
     
     if (!is.null(last.site)) {
-        id <- as.integer(page.list[match(tolower(last.site),page.list[,3]),1])
+        id <- as.integer(page.list[match(tolower(last.site),page.list[,2]),1])
         
         # last.site does not exist if id is NA
         if (!is.na(id)) {
@@ -90,7 +93,7 @@ reco.sites <- function(last.site="") {
         
         j = 1
         for (i in 1:10) {
-            site = toString(page.list[as.numeric(top.ten[i]),3])
+            site = toString(page.list[as.numeric(top.ten[i]),2])
             if (site != last.site) {
                 prediction[j] <- site
                 j <- j + 1
